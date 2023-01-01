@@ -6,7 +6,12 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "format": "npm-run-all format:*",
+    "format:json": "prettier --write \"src/**/*.json\"",
+    "format:md": "prettier --write \"**/*.md\"",
+    "format:ts": "prettier --write \"src/**/*.ts{,x}\"",
+    "lint": "eslint App.tsx src --fix --ext .js,.ts,.tsx && yarn format:ts"
   },
   "dependencies": {
     "expo": "~47.0.12",
@@ -23,6 +28,12 @@
     "@babel/core": "^7.12.9",
     "@types/react": "~18.0.14",
     "@types/react-native": "~0.70.6",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.3",
     "typescript": "^4.6.3"
   },
   "private": true
