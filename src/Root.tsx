@@ -1,11 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { NativeBaseProvider, Box } from "native-base";
 
 export default function Root() {
   return (
-    <View>
-      <Text>BWorks-mobile!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeBaseProvider>
+      <Box>BWorks-mobile!</Box>
+    </NativeBaseProvider>
   );
 }
