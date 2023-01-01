@@ -14,9 +14,12 @@
     "lint": "eslint App.tsx src --fix --ext .js,.ts,.tsx && yarn format:ts"
   },
   "dependencies": {
+    "@react-navigation/native": "^6.1.2",
     "expo": "~47.0.12",
     "expo-status-bar": "~1.4.2",
+    "history": "^5.3.0",
     "native-base": "^3.4.25",
+    "ra-core": "^4.7.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
