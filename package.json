@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
+    "start": "API_URL=http://192.168.1.51:3000/api expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -14,15 +14,23 @@
     "lint": "eslint App.tsx src --fix --ext .js,.ts,.tsx && yarn format:ts"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "~1.17.3",
+    "@react-navigation/drawer": "^6.5.7",
     "@react-navigation/native": "^6.1.2",
+    "@react-navigation/stack": "^6.3.11",
+    "@tanstack/react-query": "^4.22.0",
     "expo": "~47.0.12",
+    "expo-constants": "~14.0.2",
     "expo-status-bar": "~1.4.2",
     "history": "^5.3.0",
     "native-base": "^3.4.25",
+    "query-string": "^8.1.0",
     "ra-core": "^4.7.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
+    "react-native-gesture-handler": "2.8.0",
+    "react-native-reanimated": "2.12.0",
     "react-native-safe-area-context": "4.4.1",
     "react-native-svg": "13.4.0",
     "react-native-web": "~0.18.9"
