@@ -1,6 +1,7 @@
+import { API_URL } from './../constants';
 // import { stringify } from "query-string";
 import { loadString, remove, saveString } from './storage';
-import fetchUtils from './fetch';
+import * as fetchUtils from './fetch';
 
 export type AuthProvider = {
   login: (params: any) => Promise<{ redirectTo?: string | boolean } | void | any>;
@@ -22,8 +23,9 @@ export const getToken = (): Promise<string> => {
 
 const authProvider = (loginUrl): AuthProvider => ({
   login: ({ username, password }) => {
+    const finalUrl = `${API_URL}${loginUrl}`;
     return fetchUtils
-      .fetchJson(loginUrl, {
+      .fetchJson(finalUrl, {
         method: 'POST',
         body: JSON.stringify({ username: username, password: password }),
       })
@@ -31,8 +33,8 @@ const authProvider = (loginUrl): AuthProvider => ({
         await saveString(USERNAME_KEY, username);
         await saveString(TOKEN_KEY, json.access_token);
         await saveString(FULL_NAME_KEY, json.fullName);
-      })
-      .catch((e) => e);
+        return json;
+      });
   },
   logout: () => {
     remove(USERNAME_KEY);
@@ -52,5 +54,7 @@ const authProvider = (loginUrl): AuthProvider => ({
     };
   },
 });
+
+export const auth = authProvider('/auth/login');
 
 export default authProvider;

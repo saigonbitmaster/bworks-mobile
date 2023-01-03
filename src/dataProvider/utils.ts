@@ -17,7 +17,7 @@ const filterTransform = (filter) => {
     if (key.includes('_') && includeOptions) {
       const [field, operator] = key.split('_');
       // eslint-disable-next-line no-prototype-builtins
-      newFilter.hasOwnProperty(field)
+      newFilter?.hasOwnProperty(field)
         ? (newFilter[field] = { ...newFilter[field], ['$' + operator]: value })
         : (newFilter[field] = { ['$' + operator]: value });
     } else {

@@ -1,4 +1,4 @@
-import HttpError from './HttpError';
+// import HttpError from './HttpError';
 import { stringify } from 'query-string';
 
 export type Options = {
@@ -31,23 +31,18 @@ export const fetchJson = (url, options: Options = {}) => {
   const requestHeaders = createHeadersFromOptions(options);
 
   return fetch(url, { ...options, headers: requestHeaders })
-    .then((response) =>
-      response.text().then((text) => ({
+    .then((response) => {
+      return response.text().then((text) => ({
         status: response.status,
         statusText: response.statusText,
         headers: response.headers,
         body: text,
-      })),
-    )
+      }));
+    })
     .then(({ status, statusText, headers, body }) => {
-      let json;
-      try {
-        json = JSON.parse(body);
-      } catch (e) {
-        // not json, no big deal
-      }
+      const json = JSON.parse(body || {});
       if (status < 200 || status >= 300) {
-        return Promise.reject(new HttpError((json && json.message) || statusText, status, json));
+        return Promise.reject({ message: (json && json.message) || statusText, status });
       }
       return Promise.resolve({ status, headers, body, json });
     });

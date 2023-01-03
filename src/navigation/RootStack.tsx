@@ -13,7 +13,7 @@ const RootStack = () => {
     <Stack.Navigator>
       {data ? (
         <>
-          <Stack.Screen name="main" component={MainDrawer} />
+          <Stack.Screen name="main" component={MainDrawer} options={{ headerShown: false }} />
         </>
       ) : (
         <>
