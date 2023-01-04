@@ -17,8 +17,9 @@ const TOKEN_KEY = 'access_token';
 const USERNAME_KEY = 'username';
 const FULL_NAME_KEY = 'full_name';
 
-export const getToken = (): Promise<string> => {
-  return loadString(TOKEN_KEY) || '';
+export const getToken = async (): Promise<string> => {
+  const token = (await loadString(TOKEN_KEY)) || '';
+  return token;
 };
 
 const authProvider = (loginUrl): AuthProvider => ({
@@ -30,6 +31,7 @@ const authProvider = (loginUrl): AuthProvider => ({
         body: JSON.stringify({ username: username, password: password }),
       })
       .then(async ({ json }) => {
+        console.log(json);
         await saveString(USERNAME_KEY, username);
         await saveString(TOKEN_KEY, json.access_token);
         await saveString(FULL_NAME_KEY, json.fullName);

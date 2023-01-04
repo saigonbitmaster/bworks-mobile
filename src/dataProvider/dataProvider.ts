@@ -1,7 +1,9 @@
+import { API_URL } from './../constants';
 import { stringify } from 'query-string';
-import fetchUtils from './fetch';
+import * as fetchUtils from './fetch';
 import { DataProvider } from './types';
 import { filterTransform } from './utils';
+import { getToken } from './authProvider';
 /**
  * Maps react-admin queries to a REST API
  *
@@ -34,14 +36,14 @@ import { filterTransform } from './utils';
  *
  * export default App;
  */
-export default (
+const provider = (
   apiUrl: string,
   // token: string,
   httpClient = fetchUtils.fetchJson,
   countHeader = 'Content-Range',
 ): DataProvider => ({
-  getList: (resource, params) => {
-    const { page, perPage } = params.pagination;
+  getList: async (resource, params) => {
+    const { page = 1, perPage = 25 } = params.pagination;
     let { field } = params.sort;
     const { order } = params.sort;
     field = field == 'id' ? '_id' : field;
@@ -60,7 +62,7 @@ export default (
             // Chrome doesn't return `Content-Range` header if no `Range` is provided in the request.
             headers: new Headers({
               Range: `${resource}=${rangeStart}-${rangeEnd}`,
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${await getToken()}`,
             }),
           }
         : {};
@@ -81,10 +83,10 @@ export default (
     });
   },
 
-  getOne: (resource, params) => {
+  getOne: async (resource, params) => {
     const options = {
       headers: new Headers({
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${await getToken()}`,
       }),
     };
     return httpClient(`${apiUrl}/${resource}/${params.id}`, options).then(({ json }) => ({
@@ -92,13 +94,13 @@ export default (
     }));
   },
 
-  getMany: (resource, params) => {
+  getMany: async (resource, params) => {
     const query = {
       filter: JSON.stringify({ _id: params.ids }),
     };
     const options = {
       headers: new Headers({
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${await getToken()}`,
       }),
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
@@ -107,7 +109,7 @@ export default (
     }));
   },
 
-  getManyReference: (resource, params) => {
+  getManyReference: async (resource, params) => {
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
 
@@ -129,12 +131,12 @@ export default (
             // Chrome doesn't return `Content-Range` header if no `Range` is provided in the request.
             headers: new Headers({
               Range: `${resource}=${rangeStart}-${rangeEnd}`,
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${await getToken()}`,
             }),
           }
         : {
             headers: new Headers({
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${await getToken()}`,
             }),
           };
 
@@ -154,10 +156,10 @@ export default (
     });
   },
 
-  update: (resource, params) => {
+  update: async (resource, params) => {
     const options = {
       headers: new Headers({
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${await getToken()}`,
       }),
     };
     return httpClient(`${apiUrl}/${resource}/${params.id}`, {
@@ -168,10 +170,10 @@ export default (
   },
 
   // simple-rest doesn't handle provide an updateMany route, so we fallback to calling update n times instead
-  updateMany: (resource, params) => {
+  updateMany: async (resource, params) => {
     const options = {
       headers: new Headers({
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${await getToken()}`,
       }),
     };
     return Promise.all(
@@ -185,10 +187,10 @@ export default (
     ).then((responses) => ({ data: responses.map(({ json }) => json.id) }));
   },
 
-  create: (resource, params) => {
+  create: async (resource, params) => {
     const options = {
       headers: new Headers({
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${await getToken()}`,
       }),
     };
     return httpClient(`${apiUrl}/${resource}`, {
@@ -198,18 +200,19 @@ export default (
     }).then(({ json }) => ({ data: { ...params.data, id: json._id } }));
   },
 
-  delete: (resource, params) => {
+  delete: async (resource, params) => {
     return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: 'DELETE',
       headers: new Headers({
         'Content-Type': 'text/plain',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${await getToken()}`,
       }),
     }).then(({ json }) => ({ data: { ...json, id: json._id } }));
   },
 
   // simple-rest doesn't handle filters on DELETE route, so we fallback to calling DELETE n times instead
-  deleteMany: (resource, params) => {
+  deleteMany: async (resource, params) => {
+    const token = await getToken();
     return Promise.all(
       params.ids.map((id) =>
         httpClient(`${apiUrl}/${resource}/${id}`, {
@@ -225,3 +228,6 @@ export default (
     }));
   },
 });
+
+const dataProvider = provider(API_URL);
+export default dataProvider;
