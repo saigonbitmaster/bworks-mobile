@@ -43,18 +43,22 @@ const provider = (
   countHeader = 'Content-Range',
 ): DataProvider => ({
   getList: async (resource, params) => {
-    const { page = 1, perPage = 25 } = params.pagination;
-    let { field } = params.sort;
-    const { order } = params.sort;
-    field = field == 'id' ? '_id' : field;
+    const { page = 1, perPage = 25 } = params.pagination || {};
+
     const rangeStart = (page - 1) * perPage;
     const rangeEnd = page * perPage - 1;
 
     const query = {
-      sort: JSON.stringify([field, order]),
       range: JSON.stringify([rangeStart, rangeEnd]),
       filter: JSON.stringify(filterTransform(params.filter)),
     };
+    if (params.sort) {
+      let { field } = params.sort;
+      const { order } = params.sort;
+      field = field == 'id' ? '_id' : field;
+      query.sort = JSON.stringify([field, order]);
+    }
+
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
     const options =
       countHeader === 'Content-Range'
@@ -89,9 +93,12 @@ const provider = (
         Authorization: `Bearer ${await getToken()}`,
       }),
     };
-    return httpClient(`${apiUrl}/${resource}/${params.id}`, options).then(({ json }) => ({
-      data: { ...json, id: json._id },
-    }));
+    const url = `${apiUrl}/${resource}/${params.id}`;
+    return httpClient(url, options).then(({ json }) => {
+      return {
+        data: { ...json, id: json._id },
+      };
+    });
   },
 
   getMany: async (resource, params) => {

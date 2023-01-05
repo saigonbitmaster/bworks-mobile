@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import LoadingView from '../../components/loading/LoadingView';
 import { Box, FlatList, HStack, Spacer, Text, VStack } from 'native-base';
 import dayjs from 'dayjs';
+import RefField from '../../components/refField/RefField';
 
 const JobBidListScreen = () => {
   const queryClient = useQueryClient();
@@ -19,7 +20,7 @@ const JobBidListScreen = () => {
   if (isLoading) return <LoadingView />;
   if (!data?.data) return <LoadingView text="No Data" />;
   return (
-    <Box p="2">
+    <Box px="4">
       <FlatList
         data={data?.data}
         refreshing={isLoading}
@@ -54,13 +55,14 @@ const JobBidListScreen = () => {
                 >
                   Budget: {item.budget}
                 </Text>
+                <RefField field="fullName" resource="users" id={item.employerId} />
                 <Text
                   color="coolGray.600"
                   _dark={{
                     color: 'warmGray.200',
                   }}
                 >
-                  Employer: bworks demo user
+                  Employer: zz
                 </Text>
               </VStack>
               <Spacer />
