@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 
 const RootStack = () => {
   const { data, isLoading } = useQuery({ queryKey: ['login'], initialData: null, queryFn: () => getToken() });
-  if (isLoading) return null;
+  if (data == null || isLoading) return null;
   return (
     <Stack.Navigator>
       {data ? (
