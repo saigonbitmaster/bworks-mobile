@@ -47,22 +47,24 @@ const JobBidListScreen = () => {
                 >
                   {item.name}
                 </Text>
+                <RefField title="Job:" field="name" resource="postjobs" id={item.jobId} />
+                <RefField title="Employer:" field="fullName" resource="users" id={item.employerId} />
+                <RefField title="Job seeker:" field="fullName" resource="users" id={item.jobSeekerId} />
                 <Text
                   color="coolGray.600"
                   _dark={{
                     color: 'warmGray.200',
                   }}
                 >
-                  Budget: {item.budget}
+                  Bid value: {item.bidValue}
                 </Text>
-                <RefField field="fullName" resource="users" id={item.employerId} />
                 <Text
                   color="coolGray.600"
                   _dark={{
                     color: 'warmGray.200',
                   }}
                 >
-                  Employer: zz
+                  Rate: {item.rate}/5
                 </Text>
               </VStack>
               <Spacer />
@@ -74,7 +76,7 @@ const JobBidListScreen = () => {
                 color="coolGray.800"
                 alignSelf="flex-start"
               >
-                {dayjs(item.completeDate).format('MM/DD/YYYY HH:mm')}
+                Due: {dayjs(item.completeDate).format('MM/DD/YYYY HH:mm')}
               </Text>
             </HStack>
           </Box>
