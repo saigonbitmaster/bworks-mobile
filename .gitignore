@@ -18,3 +18,4 @@ web-build/
 
 # temporary
 /raw*
+tmp*.*
