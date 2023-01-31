@@ -26,6 +26,9 @@
         "backgroundColor": "#FFFFFF"
       }
     },
+    "plugins": [
+      "expo-localization"
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
     }

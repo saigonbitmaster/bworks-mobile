@@ -4,12 +4,13 @@ import RootStack from './navigation/RootStack';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RootSiblingParent } from 'react-native-root-siblings';
+import { navigationRef } from './navigation/navigationUtils';
 
 const queryClient = new QueryClient();
 
 export default function Root() {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <NativeBaseProvider>
         <QueryClientProvider client={queryClient}>
           <RootSiblingParent>

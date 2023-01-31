@@ -1,10 +1,10 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useQuery } from '@tanstack/react-query';
 import { getToken } from '../dataProvider/authProvider';
 import LoginScreen from '../screens/login/LoginScreen';
 import MainDrawer from './MainDrawer';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const RootStack = () => {
   const { data, isLoading } = useQuery({ queryKey: ['login'], initialData: null, queryFn: () => getToken() });

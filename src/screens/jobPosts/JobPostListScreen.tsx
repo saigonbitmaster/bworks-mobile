@@ -20,7 +20,7 @@ const JobPostListScreen = () => {
   if (isLoading) return <LoadingView />;
   if (!data?.data) return <LoadingView text="No Data" />;
   return (
-    <Box px="4">
+    <Box px="4" bgColor="white">
       <FlatList
         data={data?.data}
         refreshing={isLoading}
