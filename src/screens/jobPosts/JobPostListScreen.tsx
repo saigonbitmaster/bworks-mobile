@@ -20,21 +20,21 @@ const JobPostListScreen = () => {
   if (isLoading) return <LoadingView />;
   if (!data?.data) return <LoadingView text="No Data" />;
   return (
-    <Box px="4" bgColor="white">
+    <Box flex="1">
       <FlatList
+        p="1"
         data={data?.data}
         refreshing={isLoading}
         onRefresh={() => queryClient.invalidateQueries({ queryKey: ['postjobs'] })}
         renderItem={({ item }) => (
           <Box
             borderBottomWidth="1"
+            bg="white"
             _dark={{
               borderColor: 'muted.50',
             }}
             borderColor="muted.300"
-            pl={['0', '4']}
-            pr={['0', '5']}
-            py="2"
+            p="2"
           >
             <HStack space={[2, 3]} justifyContent="space-between">
               <VStack>
